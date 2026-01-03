@@ -1,7 +1,32 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Icon from '@/components/ui/icon';
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Card className="overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full p-6 text-left flex justify-between items-center hover:bg-accent/50 transition-colors"
+      >
+        <span className="font-semibold pr-8">{question}</span>
+        <Icon
+          name="ChevronDown"
+          className={`flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          size={20}
+        />
+      </button>
+      {isOpen && (
+        <div className="px-6 pb-6 text-muted-foreground animate-fade-in">
+          {answer}
+        </div>
+      )}
+    </Card>
+  );
+}
 
 export default function Index() {
   const scrollToSection = (id: string) => {
@@ -278,18 +303,11 @@ export default function Index() {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Часто задаваемые вопросы</h2>
           </div>
-          <Accordion type="single" collapsible className="w-full">
+          <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left font-semibold">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
+              <FAQItem key={index} question={item.question} answer={item.answer} />
             ))}
-          </Accordion>
+          </div>
         </div>
       </section>
 
